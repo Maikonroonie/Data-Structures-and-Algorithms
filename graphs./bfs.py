@@ -1,6 +1,71 @@
 from math import inf
 from collections import deque
 
+def dfs_list(graph):
+    n = len(graph)
+
+    time = 0
+    visited = [False for _ in range(n)]
+    parent = [None for _ in range(n)]
+    discovery = [inf for _ in range(n)]
+    processed = [inf for _ in range(n)]
+
+    def dfs_visit(v):
+        nonlocal time
+
+        # Increment time at visit
+        time += 1
+        discovery[v] = time
+        visited[v] = True
+
+        for u in graph[v]:
+            if not visited[u]:
+                parent[u] = v
+                dfs_visit(u)
+
+        # Increment time at backtrack
+        time += 1
+        processed[v] = time
+
+    for v in range(n):
+        if not visited[v]:
+            dfs_visit(v)
+
+    return visited, parent, discovery, processed
+
+
+def dfs_matrix(graph):
+    n = len(graph)
+
+    time = 0
+    visited = [False for _ in range(n)]
+    parent = [None for _ in range(n)]
+    discovery = [inf for _ in range(n)]
+    processed = [inf for _ in range(n)]
+
+    def dfs_visit(v):
+        nonlocal time
+
+        # Increment time at visit
+        time += 1
+        visited[v] = True
+        discovery[v] = time
+
+        for u in range(n):
+            if graph[v][u] == 1 and not visited[u]:
+                parent[u] = v
+                dfs_visit(u)
+
+        # Increment time at backtrack
+        time += 1
+        processed[v] = time
+
+    for v in range(n):
+        if not visited[v]:
+            dfs_visit(v)
+
+    return visited, parent, discovery, processed
+
 
 def bfs_list(graph, s):
     n = len(graph)
